@@ -6,12 +6,16 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 public class superController {
-  public  PrintStream socketOut = null;
-    public  BufferedReader socketIn =null;
+  public static PrintStream socketOut = null;
+    public static BufferedReader socketIn =null;
     public String SERVER_IP_ADDRESS = "127.0.0.1";
     int SERVER_PORT = 8003;
-    public  Socket s=null;
+    public static Socket s=null;
 
+    superController()
+    {
+
+    }
    public void  Connect()
     {
 
@@ -34,11 +38,14 @@ public class superController {
             e.printStackTrace();
             System.out.println("baal 2");
 
-
         }
     }
     public Socket getS()
     {
+        if(s==null)
+        {
+            System.out.println("Its null in socket 3");
+        }
         return s;
     }
    public BufferedReader getBufferedReader()

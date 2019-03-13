@@ -23,11 +23,7 @@ public  class DataBaseHandler {
         createConnection();
         System.out.println("conn createdDFGTH");
        if (setupDrugTable()) {
-          //  insert("dada","qeqw","qwdq");
-
-
         }
-
         printTable();
         // jointTable();
         //	deleteTable();
@@ -81,6 +77,8 @@ public  class DataBaseHandler {
                         + "  ID int not null generated always as identity(start with 01, increment by 01 ),"
                         + "  Name varchar(200),"
                         + " Password varchar(200),"
+                        + " IpAddress varchar(200),"
+
                         + " Email varchar(200),"
                         + "  constraint primary_key PRIMARY KEY(ID)"
                         +")";
@@ -99,14 +97,16 @@ public  class DataBaseHandler {
                 stmt.execute(s);
                 System.out.println("table created");*/
 
-              /*  String s="CREATE TABLE " + TN + "("
-                        +"  ID int primary key,\n"
-                        +"  Message varchar(200),\n"
-                        +"  sender int,\n"
-                        +"  receiver int" +")";
+                String s="CREATE TABLE " + TN + "("
+                        +"  ID int not null generated always as identity(start with 01, increment by 01 ),"
+                        +"  Message varchar(200),"
+                        +"  Sender varchar(200),"
+                        +"  Receiver varchar(200),"
+                        + "  constraint primary_key PRIMARY KEY(ID)"
+                        +")";
                 System.out.println(s);
                 stmt.execute(s);
-                System.out.println("table created");*/
+                System.out.println("table created");
 
 
 
@@ -118,31 +118,23 @@ public  class DataBaseHandler {
         }
         return false;
     }
-   /* void InsertMail(String email)
-    {
-        String tableName ="Email";
-        try {
-            stmt = conn.createStatement();
-            String s = "INSERT INTO " + tableName + "(Emmail )" + " VALUES " + "(" +
-                    // + i + "," +
+   void InsertMessage(String receiver,String sender,String Msg) throws SQLException {
+       String TN="CHAT";
 
 
-                    "'" + email + "'" + ")";
 
-            System.out.println(s);
-            stmt.execute(s);
-
-
-            System.out.println("Inserted ....");
-        }catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-
-    }*/
+      String sr= "INSERT INTO " + TN+ "(Message , Sender, Receiver )" +" VALUES " + "("
+               +
+               "'"+  Msg + "',"+
+              "'" + sender + "'," +
+              "'" + receiver + "'" +")";
+       System.out.println(sr);
+       stmt.execute(sr);
+       System.out.println("Inserted");
+   }
 
 
-    void insert(String name, String pass,String email) {
+    void insert(String name, String pass,String ipAdd,String email) {
         String tableName = "USERID";
         System.out.println(name + "\t " + pass);
         // String TN="CHAT";
@@ -151,11 +143,13 @@ public  class DataBaseHandler {
             stmt = conn.createStatement();
 
 
-            String s = "INSERT INTO " + tableName+ "(Name , Password, Email )" +" VALUES " + "("+
+            String s = "INSERT INTO " + tableName+ "(Name , Password,IpAddress , Email )" +" VALUES " + "("+
                    // + i + "," +
 
                     "'" + name + "'," +
                     "'" + pass + "'," +
+                    "'" + ipAdd + "'," +
+
                     "'" + email + "'" +")";
 
             System.out.println(s);
@@ -228,6 +222,27 @@ public  class DataBaseHandler {
             System.out.println("Problem in email Search...");
         }
         return true;
+    }
+    public String IpAddress(String name)
+    {
+        ResultSet ret = null;
+        System.out.println("Name =" + name );
+        try {
+            stmt = conn.createStatement();
+
+            ResultSet rs = null;
+            rs = stmt.executeQuery("SELECT * FROM USERID");
+            while (rs.next()) {
+                if ((name.equals(rs.getString("Name")))) {
+                    System.out.println("Milse....");
+
+                    return (rs.getString("IpAddress"));
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Problem in ipaddress Search...");
+        }
+        return "ip nai";
     }
 
     public boolean loginSearch(String name, String pass) throws SQLException {

@@ -34,8 +34,6 @@ public class signupController extends superController implements Initializable {
     @FXML
     Button Back,SignUP;
 
-   // DataBaseHandler pdb = new DataBaseHandler();
-
     public signupController()
     {
 
@@ -90,8 +88,7 @@ public class signupController extends superController implements Initializable {
         System.out.println("My Shit 4");
     }
 
-    public void signupButtonAction()
-    {
+    public void signupButtonAction() {
 
         String fName = firstName.getText();
         String lName = lastName.getText();
@@ -101,12 +98,17 @@ public class signupController extends superController implements Initializable {
         String type = choiceBox.getValue();
 
 
-
-         if(fName.trim().equals("") || lName.trim().equals("") || email.trim().equals("") ||
-                pword.trim().equals("") || type.trim().equals("Select Gender")|| reenterPassword.trim().equals(""))
-        {
+        if (fName.trim().equals("") || lName.trim().equals("") || email.trim().equals("") ||
+                pword.trim().equals("") || type.trim().equals("Select Gender") || reenterPassword.trim().equals("")) {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Please fill all fields");
+            alert.show();
+            return;
+        }
+        if(pword.length()<7)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Password atleast 8 char");
             alert.show();
             return ;
         }
@@ -150,18 +152,14 @@ public class signupController extends superController implements Initializable {
         }
 
 
-      //  pdb.insert(fName,pword,email);
-
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setHeaderText("Account created!\nPlease login");
 
-
-
-            socketOut.println(fName);
-            socketOut.println(pword);
-            socketOut.println(email);
+        socketOut.println(fName);
+        socketOut.println(pword);
+        socketOut.println(email);
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK){
+        if (result.get() == ButtonType.OK) {
             System.out.println("OK presssed");
             firstName.clear();
             lastName.clear();
@@ -173,10 +171,6 @@ public class signupController extends superController implements Initializable {
         }
         System.out.println("Eat shit");
 
-        }
-
-
-
-
+    }
 
 }

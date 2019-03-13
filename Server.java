@@ -1,5 +1,7 @@
 package sample;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Label;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,11 +13,20 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 class ClientReaderThread extends Thread
 {
     private Socket clientSocket;
     private int cn;
+    public static int f=0;
     static List<PrintStream> clientWriters = new ArrayList<PrintStream>();
+    static List<String> clientNames = new ArrayList<String>();
+
+    public ClientReaderThread()
+    {
+
+    }
     public ClientReaderThread(Socket s, int cn)
     {
         super();
@@ -38,7 +49,7 @@ class ClientReaderThread extends Thread
             System.out.println("hoise 3");
 
             System.out.println("IP Address = "+clientSocket.getInetAddress());
-            InetAddress ipAdd=clientSocket.getInetAddress();
+            String ipAdd=clientSocket.getInetAddress().getHostAddress();
             System.out.println("baal 4");
 
             int n=2;
@@ -71,50 +82,161 @@ class ClientReaderThread extends Thread
             String  email=socketIn.readLine();
             System.out.println("hoise 6");
 
-            pdb.insert(name,pword,email);
+            pdb.insert(name,pword,ipAdd,email);
+            clientNames.add(name);
+
             System.out.println("hoise 7");
             clientWriters.add(socketOut);
+            String code=null;
            while(true)
            {
-               name=socketIn.readLine();
-               pword=socketIn.readLine();
-               System.out.println("name in server ="+name+"\t"+pword);
-               int nn=0;
-              boolean idd = pdb.loginSearch(name, pword);
-              if(idd)
-              {
-                  System.out.println("Thik de hala...");
-                  socketOut.print(true);
-              }
-              else
-              {
-                  nn=2;
-                  System.out.println("Thik dsos hala...");
-                  socketOut.print(false);
+               code=socketIn.readLine();
+               System.out.println("c0de = "+code);
 
-
-              }
-
-
-               while (n==2)
+               if(code.equals("logIn"))
                {
-                   String line = socketIn.readLine();
-                   if(line.equals("e")) nn=3;
+                   name=socketIn.readLine();
+                   pword=socketIn.readLine();
+                   System.out.println("name in server ="+name+"\t"+pword);
+                   int nn=0;
+                   boolean idd = pdb.loginSearch(name, pword);
+                   if(idd)
+                   {
+                       System.out.println("Thik de hala...");
+                       socketOut.println("NotLogIn");
+                   }
+
                    else
                    {
-                       System.out.println("Read line from connection: " + this.cn);
-
-                       for(PrintStream cw: clientWriters)
+                       nn=2;
+                       System.out.println("Thik dsos hala...");
+                       int y=clientNames.size();
+                       socketOut.println("LogIn");
+                       socketOut.print(y);
+                       System.out.println(y);
+                       for(String cw: ClientReaderThread.clientNames)
                        {
-                           cw.println(line);
+                           socketOut.println(cw);
+                           System.out.println(1+"\t bar");
                        }
+
+                     /* else if()
+                      {
+                          String frndName=socketIn.readLine();
+                          //  String ip= pdb.IpAddress(frndName);
+                          //socketOut.println(ip);
+                          String cw=null;
+                          for( int i=0;i<clientNames.size();i++)
+                          {
+                              cw=clientNames.get(i);
+                              if(frndName.equals(cw))
+                              {
+                                  PrintStream prst=clientWriters.get(i);
+                                  socketOut.println(prst);
+                              }
+                          }
+                      }*/
+
+
+
                    }
 
                }
+               else if (code.equals("rqstFrnd"))
+               {
+                   String frndName=socketIn.readLine();
+                   System.out.println("baal 1");
+                   String cw=null;
+                         /* PrintStream prst=null;
+                          for( int i=0;i<clientNames.size();i++)
+                          {
+                              cw=clientNames.get(i);
+                              if(frndName.equals(cw))
+                              {
+                                   prst=clientWriters.get(i);
+                                  socketOut.println(prst);
+                                  System.out.println("baal 2");
+
+                                  break;
+                              }
+                          }
+                          prst.println("Some one wants to be your frnd?");*/
+                   System.out.println("Sender = "+name+"\treceiver = "+frndName);
+                   while(true)
+                   {
+                       String msg=socketIn.readLine();
+                       System.out.println("Msg from client 1 :"+msg);
+
+
+
+                       //    pdb.InsertMessage(frndName,name,msg);
+                       System.out.println("baal 3");
+
+                       // prst.println(msg);
+                       for(PrintStream cwt: clientWriters) {
+                           System.out.println("Msg from client 3 :"+msg);
+                           cwt.println(msg);
+                       }
+                       System.out.println("baal 4");
+
+                   }
+
+
+               }
+               else if(code.equals("p2p"))
+               {
+
+                   String frndName=socketIn.readLine();
+                   System.out.println("saal 1");
+                   String cw=null;
+                         PrintStream prst=null;
+                          for( int i=0;i<clientNames.size();i++)
+                          {
+                              cw=clientNames.get(i);
+                              if(frndName.equals(cw))
+                              {
+                                   prst=clientWriters.get(i);
+                                  socketOut.println(prst);
+                                  System.out.println("saal 2");
+
+                                  break;
+                              }
+                          }
+                   System.out.println("Sender = "+name+"\treceiver = "+frndName);
+                   while(true)
+                   {
+                       String msg=socketIn.readLine();
+                       System.out.println("Msg from client 1 :"+msg);
+
+
+
+                       //    pdb.InsertMessage(frndName,name,msg);
+                       System.out.println("baal 3");
+
+                       // prst.println(msg);
+                       for(PrintStream cwt: clientWriters) {
+                           System.out.println("Msg from client 3 :"+msg);
+                           cwt.println(msg);
+                       }
+                       System.out.println("baal 4");
+
+                   }
+
+
+               }
+
+
+
+
+
            }
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    public ArrayList getArr()
+    {
+        return (ArrayList) clientNames;
     }
 
 }
@@ -131,9 +253,12 @@ public class Server {
             int cnumber = 1;
             while (true) {
                 Socket s = ss.accept();
+                String host=s.getInetAddress().getHostAddress();
 
 
                 System.out.println("Got a new connection, number: " + cnumber);
+                System.out.println("host = "+host);
+
                 Thread ct = new ClientReaderThread(s, cnumber);
                 ct.start();
                 cnumber++;
@@ -143,4 +268,33 @@ public class Server {
         }
 
     }
+
+
 }
+/*
+
+Platform.runLater(new Runnable() {
+    @Override
+    public void run() {
+      //Execute some script to hide a div
+      webEngine.executeScript("document.getElementById('myDiv').style.display='none';");
+    }
+});
+
+
+*/
+
+/*
+
+class ClientActiveThread extends Thread
+{
+    public ClientActiveThread()
+    {
+        super();
+    }
+
+    ClientReaderThread y=new ClientReaderThread();
+    y.
+
+}
+*/

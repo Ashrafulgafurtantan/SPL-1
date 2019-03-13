@@ -23,9 +23,11 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+
+import static java.lang.System.out;
 //import personDataBase.personDBHandler;
 
-public class Controller   implements Initializable {
+public class Controller    implements Initializable {
     @FXML
     private AnchorPane anchorPane;
     @FXML
@@ -35,26 +37,10 @@ public class Controller   implements Initializable {
     @FXML
     TextField username;
 
-    //signupController suc;
-    FXMLLoader loader;
-
-  //  DataBaseHandler pdb = new DataBaseHandler();
-
-
     @Override
     public void initialize(URL arg0, ResourceBundle arg1) {
     }
 
-    /*
-        public void mouseHover()
-        {
-            System.out.println("Mouse hovering");
-            //Stage window = (Stage) ((Node)event.getSource()).getScene().getWindow();
-            //imageView.fitWidthProperty().bind(window.widthProperty());
-            //imageView.fitHeightProperty().bind(window.heightProperty());
-
-        }
-    */
     public void signupButtonAction(ActionEvent en) throws IOException {
         FadeTransition fadeout = new FadeTransition(Duration.seconds(1.5), anchorPane);
         fadeout.setFromValue(1);
@@ -67,11 +53,20 @@ public class Controller   implements Initializable {
 
        fadeout.setOnFinished(e-> {
            try {
-               //AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("signupScreen.fxml"));
+             /*  AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("signupScreen.fxml"));
                loader = new FXMLLoader(getClass().getResource("signupScreen.fxml"));
                AnchorPane signupScreenPane = loader.load();
+*/
+
+
+               anchorPane.getChildren().clear();
+               AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("signupScreen.fxml"));
+
+               anchorPane.getChildren().add(signupScreenPane);
+
+
                //suc = loader.getController();
-               System.out.println("SUC IS READY");
+               out.println("SUC IS READY");
                anchorPane.getChildren().clear();
                anchorPane.getChildren().add(signupScreenPane);
                fadeIn.play();
@@ -88,61 +83,55 @@ public class Controller   implements Initializable {
             alert.setHeaderText("Please fill all fields");
             alert.show();
         }
+        out.println("lolll 1343");
 
 
-
-        signupController suc = loader.getController();
-       Socket  s=suc.getS();
-        System.out.println("lolll 1343");
-       BufferedReader socketIn=suc.getBufferedReader();
-       PrintStream socketOut=suc.getPrintStream();
-       if(socketOut==null)
+       if(superController.socketOut==null)
            System.out.println("it is null in controller");
        else
-           System.out.println("It is not null in controller 2");
+           System.out.println("It is not null in controller ");
 
-       /* try {
-           // socketIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
-           // socketOut = new PrintStream(s.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        System.out.println("hello i am in loginCon");
+
+        superController.socketOut.println("logIn");
+
+        superController.socketOut.println(name);
+        System.out.println("little bit complete.. 1");
+        superController.socketOut.println(pass);
         System.out.println("in login name = "+name+"\t"+pass);
 
-        System.out.println("hello i am here");
 
-        socketOut.println(name);
-        System.out.println("little bit complete.. 1");
-        socketOut.println(pass);
-
-
-
-        boolean idd=true;
-
-        if(socketOut.equals(null))
+        if(superController.socketOut.equals(null))
         {
             System.out.println("NULL....");
         }
-        if(s.equals(null))
+        if(superController.s.equals(null))
         {
             System.out.println("NULL...ssqsq.");
         }
         System.out.println("little bit complete.. 1");
 
-        System.out.println("here in signup 101");
-
-        idd=socketIn.markSupported();
-        System.out.println(idd);
+        System.out.println("here in login 201");
+        String ans=null;
+        try {
+             ans=superController.socketIn.readLine();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         System.out.println("request send");
+        System.out.println("Answere = "+ans);
 
-            if (idd) {
+            if (ans.equals("trueNotLogIn")|| ans.equals("NotLogIn"))
+            {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setHeaderText("User name or password is incorrect");
                 alert.show();
                 return;
             }
-            else
+
+            else if(ans.equals("trueLogIn")||ans.equals("LogIn"))
                 {
+                    System.out.println("Person data base...");
 
                     FadeTransition fadeout = new FadeTransition(Duration.seconds(1.5), anchorPane);
                     fadeout.setFromValue(1);
@@ -156,7 +145,7 @@ public class Controller   implements Initializable {
                     fadeout.setOnFinished(e-> {
                         try {
                             anchorPane.getChildren().clear();
-                            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("person.fxml"));
+                            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("pers.fxml"));
 
                             anchorPane.getChildren().add(signupScreenPane);
                             fadeIn.play();
@@ -166,6 +155,10 @@ public class Controller   implements Initializable {
                     });
                     System.out.println("Hoise...");
                 }
+                else
+            {
+                System.out.println("Problem in answere...");
+            }
     }
 
 
