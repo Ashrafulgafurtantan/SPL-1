@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane prefHeight="394.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Profile">
+   <children>
+      <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="375.0" layoutY="39.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="37.0" layoutY="39.0" prefHeight="21.0" prefWidth="163.0" text="First Name" />
+      <Label layoutX="37.0" layoutY="121.0" prefHeight="21.0" prefWidth="163.0" text="E-maill" />
+      <Label layoutX="37.0" layoutY="179.0" prefHeight="21.0" prefWidth="163.0" text="Password" />
+   </children>
+</AnchorPane>

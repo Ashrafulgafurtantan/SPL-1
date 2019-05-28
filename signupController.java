@@ -30,9 +30,11 @@ public class signupController extends superController implements Initializable {
     Socket s;
 
     @FXML
-    TextField firstName, lastName, Email, password,reEnterPassword;
+    TextField firstName, lastName, Email;
     @FXML
     Button Back,SignUP;
+    @FXML
+    PasswordField password,reEnterPassword;
 
     public signupController()
     {
@@ -73,7 +75,7 @@ public class signupController extends superController implements Initializable {
 
         try {
             anchorPane.getChildren().clear();
-            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("logInSystem.fxml"));
+            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("LogIn.fxml"));
 
             anchorPane.getChildren().add(signupScreenPane);
             fadeIn.play();
@@ -89,6 +91,7 @@ public class signupController extends superController implements Initializable {
     }
 
     public void signupButtonAction() {
+        superController.socketOut.println("SignIn");
 
         String fName = firstName.getText();
         String lName = lastName.getText();
@@ -96,6 +99,7 @@ public class signupController extends superController implements Initializable {
         String pword = password.getText();
         String reenterPassword = reEnterPassword.getText();
         String type = choiceBox.getValue();
+        System.out.println("Name = "+fName+"\n pword = "+pword+"\n reenter = "+reenterPassword);
 
 
         if (fName.trim().equals("") || lName.trim().equals("") || email.trim().equals("") ||
@@ -105,14 +109,30 @@ public class signupController extends superController implements Initializable {
             alert.show();
             return;
         }
-        if(pword.length()<7)
+        /*if(pword.length()<7 )
         {
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setHeaderText("Password atleast 8 char");
             alert.show();
             return ;
         }
-        Connect();
+      if( pword.equals(reenterPassword)){}
+        else
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Password may be incorrect");
+            alert.show();
+            return ;
+        }
+       if(fName.length()<=2)
+        {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setHeaderText("Correct Name Plz");
+            alert.show();
+            return ;
+        }*/
+
+       // Connect();
 
         System.out.println("here in signup 2");
 
@@ -133,7 +153,7 @@ public class signupController extends superController implements Initializable {
         }*/
 
 
-        boolean idd;
+      //  boolean idd;
 
 
         socketOut.println(email);

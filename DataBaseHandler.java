@@ -2,6 +2,8 @@ package sample;
 
 import com.sun.xml.internal.bind.v2.model.core.ID;
 
+import java.io.PrintStream;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -85,28 +87,29 @@ public  class DataBaseHandler {
 
                 System.out.println(myShit);
                 stmt.execute(myShit);
-                System.out.println("table created");
+                System.out.println(" lol table created");
 
 
-               /* String s="CREATE TABLE " + email + "("+
-                       // + "  ID int not null generated always as identity(start with 01, increment by 01 ),"
-                        "  Emmail varchar(200)"+")";
-                      //  + "  constraint primary_key PRIMARY KEY(ID)"
 
-                System.out.println(s);
-                stmt.execute(s);
-                System.out.println("table created");*/
-
-                String s="CREATE TABLE " + TN + "("
+               /* String s="CREATE TABLE " + TN + "("
                         +"  ID int not null generated always as identity(start with 01, increment by 01 ),"
                         +"  Message varchar(200),"
                         +"  Sender varchar(200),"
                         +"  Receiver varchar(200),"
                         + "  constraint primary_key PRIMARY KEY(ID)"
+                        +")";*/
+
+
+                String s="CREATE TABLE " + TN + "("
+                       // +"  ID int not null generated always as identity(start with 01, increment by 01 ),"
+                        +"Message varchar(200),"
+                        +"Sender varchar(200),"
+                        +"Receiver varchar(200)"
+                      //  + "  constraint primary_key PRIMARY KEY(ID)"
                         +")";
                 System.out.println(s);
                 stmt.execute(s);
-                System.out.println("table created");
+                System.out.println("chat table created");
 
 
 
@@ -117,6 +120,50 @@ public  class DataBaseHandler {
             e.printStackTrace();
         }
         return false;
+    }
+    String  sendMsg(Socket clientSocket,String Sender,String Receiver) throws Exception
+    {
+        String rt=null;
+        System.out.println("ashcheeeee");
+        PrintStream socketOut = new PrintStream(clientSocket.getOutputStream());
+        try{
+
+            stmt =null;
+            stmt =conn.createStatement();
+            ResultSet rs = null;
+            rs = stmt.executeQuery("SELECT * FROM CHAT");
+
+
+            System.out.println("ready");
+
+
+            while(rs.next())
+        {
+            System.out.println("ashche 2");
+
+            System.out.println(rs.getString("Message"));
+            String s=rs.getString("Sender");
+            String r=rs.getString("Receiver");
+            System.out.println("Sender = "+s);
+            System.out.println("receiver = "+r);
+
+            if(((s.equals(Sender)) && (r.equals(Receiver)))||((s.equals(Receiver)) && (r.equals(Sender))))
+            {
+                System.out.print("msg in database...\n\n\n");
+                System.out.println(rs.getString("Message"));
+                rt=rt+","+rs.getString("Message");
+
+            }
+        }
+        System.out.println("in the end");
+
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+return rt;
+
     }
    void InsertMessage(String receiver,String sender,String Msg) throws SQLException {
        String TN="CHAT";
@@ -132,7 +179,6 @@ public  class DataBaseHandler {
        stmt.execute(sr);
        System.out.println("Inserted");
    }
-
 
     void insert(String name, String pass,String ipAdd,String email) {
         String tableName = "USERID";
@@ -157,50 +203,36 @@ public  class DataBaseHandler {
 
 
             System.out.println("Inserted ....");
-           /* s= "INSERT INTO " + tableName+" VALUES " + "("
-                    + 2     + ","+
-                    "'"+     "Ashraf" + "'"+")";
-            System.out.println(s);
-            stmt.execute(s);
-            System.out.println("Inserted");
 
-
-
-
-            String sr= "INSERT INTO " + TN+" VALUES " + "("
-                    + 1     + ","+
-                    "'"+   "Hello"   + "',"+
-                    +  1    + ","+
-                    +   2 +")";
-            System.out.println(sr);
-            stmt.execute(sr);
-            System.out.println("Inserted");
-
-
-
-            sr= "INSERT INTO " + TN+" VALUES " + "("
-                    + 2     + ","+
-                    "'"+   "Hi"   + "',"+
-                    +  1    + ","+
-                    +   2 +")";
-            System.out.println(sr);
-            stmt.execute(sr);
-            System.out.println("Inserted");
-
-
-            sr= "INSERT INTO " + TN+" VALUES " + "("
-                    + 3     + ","+
-                    "'"+   "GoodBye"   + "',"+
-                    +  2    + ","+
-                    +   1 +")";
-            System.out.println(sr);
-            stmt.execute(sr);
-            System.out.println("Inserted");*/
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    String Profile(String name)
+    {
+        System.out.println("name =" + name );
+        try {
+            stmt =null;
+            stmt =conn.createStatement();
+            ResultSet rs = null;
+            rs = stmt.executeQuery("SELECT * FROM USERID");
+            while (rs.next()) {
+                System.out.println("shit 1");
+                System.out.println(rs.getString("Name"));
+                if (name.equals(rs.getString("Name"))) {
+                    System.out.println("mail milse...");
+                    String hh=rs.getString("Name")+","+rs.getString("Email")+","+rs.getString("Password");
+                    return hh;
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Problem in email Search...");
+        }
+        return null;
+    }
+
 
     boolean MailSearch(String email)
     {

@@ -161,13 +161,28 @@ class ClientReaderThread extends Thread
                    }
 
                }
+               else if(code.equals("Profile"))
+               {
+                   System.out.println("its in profile");
+                   System.out.println("Name = "+name);
+                   System.out.println("its in profile   2");
+
+                   System.out.println(socketIn.readLine());
+
+                  String pro= pdb.Profile(name);
+                  socketOut.println(pro);
+                   System.out.println("profile gese");
+
+
+
+
+               }
                else  if(code.equals("PersonHandler"))
                {
 
                    System.out.println("i am here in Person hand");
-                   // if(forJust2ndTimeCallfrndListThread==-1)
                     {
-                        forJust2ndTimeCallfrndListThread=22;
+                        //forJust2ndTimeCallfrndListThread=22;
                         Thread frndList = new FindFriend(socketOut,socketIn,clientNames,ListClass.clientWriters);
                        // frndList.start();
                         System.out.println("First time and last time in code...");
@@ -280,7 +295,18 @@ class ClientReaderThread extends Thread
 
 
                    System.out.println("Sender = "+name+"\treceiver = "+frndName);
-                   pdb.sendMsg(clientSocket,name,frndName);
+                   String pastMsg=pdb.sendMsg(clientSocket,name,frndName);
+                   System.out.println( "Past msg = "+pastMsg);
+                   String newstr=null;
+                   if(pastMsg!=null)
+                   {
+                        newstr =  pastMsg.substring(5 , pastMsg.length());
+
+                   }
+
+
+                   System.out.println("new one = "+newstr);
+                   socketOut.println(newstr);
                    while(true)
                    {
                        String msg=socketIn.readLine();
@@ -294,6 +320,8 @@ class ClientReaderThread extends Thread
 
                            break;
                        }
+                           pdb.InsertMessage(frndName,name,msg);
+
 
 
                        System.out.println("Size =   ="+ListClass.clientWriters.size());

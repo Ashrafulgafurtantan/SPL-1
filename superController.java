@@ -5,27 +5,39 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
+import java.util.HashMap;
+import java.util.Map;
+
 public class superController {
   public static PrintStream socketOut = null;
-    public static BufferedReader socketIn =null;
+  public static Map<String ,String> StaredMap=new HashMap<>();
+    public static BufferedReader socketIn =null,SocketInFORFrnds=null;
     public String SERVER_IP_ADDRESS = "127.0.0.1";
-    int SERVER_PORT = 8003;
-    public static Socket s=null;
+   public  static String FriendNoeConnected;
+    int SERVER_PORT = 8005;
+    public static Socket s=null,ExtraSocket;
 
     superController()
     {
 
     }
+
    public void  Connect()
     {
 
         try {
-            System.out.println("lolll 1");
+            System.out.println("lollllll 1");
             s = new Socket(SERVER_IP_ADDRESS, SERVER_PORT);
-            System.out.println("lolll 1.5");
+          //  ExtraSocket = new Socket(SERVER_IP_ADDRESS, 8009);
+            if(ExtraSocket!=null)
+            System .out.println("Also connected in 8009");
+
+            System.out.println("lolllllll 1.5");
 
             socketIn = new BufferedReader(new InputStreamReader(s.getInputStream()));
-            System.out.println("lolll 2");
+          //  SocketInFORFrnds=new BufferedReader(new InputStreamReader(ExtraSocket.getInputStream()));
+
+            System.out.println("lollllll 2");
 
             socketOut = new PrintStream(s.getOutputStream());
             if(socketOut==null)

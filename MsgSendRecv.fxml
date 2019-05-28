@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="546.0" prefWidth="600.0" style="-fx-background-radius: 13;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.messageContr">
+    <children>
+        <TextField fx:id="Msg" layoutX="61.0" layoutY="450.0" prefHeight="31.0" prefWidth="347.0" />
+        <Button fx:id="Send" layoutX="440.0" layoutY="450.0" mnemonicParsing="false" onAction="#pathao" text="send" />
+        <ScrollPane fx:id="scrollPane" layoutX="47.0" layoutY="84.0" prefHeight="328.0" prefWidth="519.0" style="-fx-background-color: Ash; -fx-background-radius: 14;">
+            <content>
+                <FlowPane fx:id="flow" prefHeight="317.0" prefWidth="515.0" />
+            </content>
+        </ScrollPane>
+        <Label fx:id="name" layoutX="26.0" layoutY="42.0" prefHeight="21.0" prefWidth="108.0" text="Message" />
+      <MenuButton fx:id="Mbutt" layoutX="69.0" layoutY="501.0" mnemonicParsing="false" text="FileChoice">
+        <items>
+          <MenuItem fx:id="file" mnemonicParsing="false" onAction="#AttachFile" text="File" />
+          <MenuItem fx:id="photo" mnemonicParsing="false" onAction="#AttachPhoto" text="Photo" />
+        </items>
+      </MenuButton>
+      <Button fx:id="Back" layoutX="275.0" layoutY="501.0" mnemonicParsing="false" onAction="#Back" text="Back" />
+      <ChoiceBox fx:id="cBox" layoutX="169.0" layoutY="27.0" prefWidth="150.0" />
+    </children>
+</AnchorPane>

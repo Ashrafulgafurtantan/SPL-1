@@ -208,6 +208,27 @@ public class personController implements Initializable {
 
     }
     @FXML
+    public void profile(ActionEvent t)
+    {
+        try {
+            anchorPane.getChildren().clear();
+            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("Profile.fxml"));
+            System.out.println("your shit");
+
+
+            anchorPane.getChildren().add(signupScreenPane);
+            System.out.println("My Shi t  2.798");
+
+            System.out.println("My Shit 3..76g");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+
+
+            System.out.println("My Shit 4");
+        }
+    }
+
+    @FXML
     public void Star(ActionEvent q)
     {
         /*FadeTransition fadeout = new FadeTransition(Duration.seconds(1.5), anchorPane);

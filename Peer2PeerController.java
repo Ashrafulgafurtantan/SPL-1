@@ -33,7 +33,8 @@ public class Peer2PeerController implements Initializable {
     Button back;
 
     public void initialize(URL arg0, ResourceBundle arg1) {
-        System.out.println("Started person handler");
+        System.out.println("Started p2p handler");
+        superController.socketOut.println("p2p");
 
         try {
             int bb=5;
@@ -41,38 +42,36 @@ public class Peer2PeerController implements Initializable {
 
             for(int i=0;i<1;i++)
             {
+                cw=superController.socketIn.readLine();
+
                 int n=superController.socketIn.read();
 
-                System.out.println("size = "+n);
+                System.out.println("size in p2p = "+n);
 
 
-                cw=superController.socketIn.readLine();
+
                 if(cw==null)
                 {
                     System.out.println("shes");
                     break;
                 }
-
-
                 System.out.println("print = "+cw);
                 Label label=new Label() ;
+                label.setText(cw);
                 label.setOnMouseClicked(e->{
                     String Frnd=label.getText();
 
-
-                    superController.socketOut.println("p2p");
                     superController.socketOut.println(Frnd);
 //eta must
-                 /*   try {
+                    try {
 
                         anchorPane.getChildren().clear();
                         AnchorPane signupScreenPane = null;
-                        signupScreenPane = FXMLLoader.load(getClass().getResource("message.fxml"));
+                        signupScreenPane = FXMLLoader.load(getClass().getResource("fake.fxml"));
                         anchorPane.getChildren().add(signupScreenPane);
                     } catch (IOException e1) {
                         e1.printStackTrace();
-                    }*/
-
+                    }
                     //for some test start
 
                  /*  try {
@@ -87,7 +86,6 @@ public class Peer2PeerController implements Initializable {
                     //end
 
                 });
-                label.setText(cw);
                 cw=null;
                 System.out.println("lol");
                 label.setMaxSize(600,69);

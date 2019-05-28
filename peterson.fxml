@@ -9,7 +9,7 @@
 <AnchorPane fx:id="anchorPane" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.personController">
     <children>
         <Label layoutX="85.0" layoutY="32.0" prefHeight="21.0" prefWidth="190.0" text="Connected" />
-        <ScrollPane fx:id="scrollPane" layoutX="91.0" layoutY="75.0" prefHeight="200.0" prefWidth="269.0">
+        <ScrollPane fx:id="scrollPane" layoutX="91.0" layoutY="75.0" prefHeight="200.0" prefWidth="230.0">
             <content>
                 <FlowPane fx:id="floePane" prefHeight="200.0" prefWidth="211.0">
                     <children>
@@ -18,8 +18,5 @@
             </content>
         </ScrollPane>
         <Button fx:id="back" layoutX="91.0" layoutY="333.0" mnemonicParsing="false" onAction="#BackButtonAction" prefHeight="31.0" prefWidth="132.0" text="Exit" />
-      <Button fx:id="Refresh" layoutX="282.0" layoutY="333.0" mnemonicParsing="false" onAction="#REfreshButtonAc" text="Refresh" />
-      <Button fx:id="Profile" layoutX="457.0" layoutY="333.0" mnemonicParsing="false" onAction="#profile" text="Profile" />
-      <Button fx:id="star" layoutX="374.0" layoutY="333.0" mnemonicParsing="false" onAction="#Star" text="Stared" />
     </children>
 </AnchorPane>
