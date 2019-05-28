@@ -123,7 +123,7 @@ public class personController implements Initializable {
     @FXML
     Button back,Profile;
     @FXML
-    Button Refresh;
+    Button Refresh,star;
     static int n=-1;
     static String cw=null;
 
@@ -151,7 +151,7 @@ public class personController implements Initializable {
 */
 
                 n=superController.socketIn.read();
-           if(n>20)
+           if(n>47)
              n=n-48;
            System.out.println("More ja");
 
@@ -194,7 +194,7 @@ public class personController implements Initializable {
                label.setText(cw);
                System.out.println("lol");
                label.setMaxSize(600,69);
-               label.setPadding(new Insets(0, 20, 10, 20));
+               label.setPadding(new Insets(0, 20, 3, 20));
                label.setStyle("-fx-border-color:BLACK;");
                vbox.getChildren().add(label);
 
@@ -205,6 +205,41 @@ public class personController implements Initializable {
            System.out.println("prob in person 1");       }
 
        System.out.println("Shit123");
+
+    }
+    @FXML
+    public void Star(ActionEvent q)
+    {
+        /*FadeTransition fadeout = new FadeTransition(Duration.seconds(1.5), anchorPane);
+        fadeout.setFromValue(1);
+        fadeout.setToValue(0);
+        fadeout.play();
+        System.out.println("My Shit  1111");
+        FadeTransition fadeIn = new FadeTransition(Duration.seconds(1.5), anchorPane);
+        fadeIn.setFromValue(0);
+        fadeIn.setToValue(1);*/
+
+        System.out.println("My Shit  2.22222");
+
+        try {
+            anchorPane.getChildren().clear();
+            AnchorPane signupScreenPane = FXMLLoader.load(getClass().getResource("Started.fxml"));
+            System.out.println("your shit");
+
+
+            anchorPane.getChildren().add(signupScreenPane);
+            System.out.println("My Shi t  2.798");
+
+           // fadeIn.play();
+            System.out.println("My Shit 3..76g");
+        } catch (IOException e1) {
+            e1.printStackTrace();
+
+            /*fadeout.setOnFinished(e-> {
+
+            });*/
+            System.out.println("My Shit 4");
+        }
 
     }
 
@@ -253,4 +288,6 @@ public class personController implements Initializable {
 
 
 
-}}
+}
+
+}

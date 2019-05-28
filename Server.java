@@ -8,11 +8,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 
 class FindFriend extends Thread {
 
-    PrintStream socketOutForFrnds=null;
+   // PrintStream socketOutForFrnds=null;
     BufferedReader socketIn;
     static List<String> clientNames ;
     static List<PrintStream>SendFrndsName;
@@ -22,7 +24,7 @@ class FindFriend extends Thread {
 
         super();
         this.socketIn=socketIn;
-        this.socketOutForFrnds=socketOutForFrnds;
+      //  this.socketOutForFrnds=socketOutForFrnds;
         clientNames=c;
         this.SendFrndsName=SendFrndsName;
 
@@ -66,21 +68,27 @@ class FindFriend extends Thread {
 class ClientReaderThread extends Thread
 {
     private Socket clientSocket;
+    Map< String,Socket> map =new TreeMap<>();
+
     private int cn;
     public static int f=0,forJust2ndTimeCallfrndListThread=-1;
-    static List<PrintStream> clientWriters = new ArrayList<PrintStream>();
+    PrintStream socketOut;
 
     static List<String> clientNames = new ArrayList<String>();
+
 
     public ClientReaderThread()
     {
 
     }
-    public ClientReaderThread(Socket s, int cn)
+    public ClientReaderThread(Socket s, int cn,Map<String,Socket>map,List<String>clientNames,PrintStream socketOut)
     {
         super();
         this.clientSocket = s;
         this.cn = cn;
+        this.map=map;
+        this.clientNames=clientNames;
+        this.socketOut=socketOut;
     }
 
     @Override
@@ -89,6 +97,7 @@ class ClientReaderThread extends Thread
         BufferedReader socketIn;
         DataBaseHandler pdb=new DataBaseHandler(23);
       //  DataBaseHandler p=new DataBaseHandler()
+        String fuck=null;
         System.out.println("hoise 101");
         try {
             System.out.println("hoise 1");
@@ -96,8 +105,6 @@ class ClientReaderThread extends Thread
             socketIn = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
             System.out.println("hoise 2");
 
-            PrintStream socketOut = new PrintStream(clientSocket.getOutputStream());
-            //PrintStream socketOutForFrnds = new PrintStream(SC.getOutputStream());
 
             System.out.println("hoise 3");
 
@@ -110,6 +117,14 @@ class ClientReaderThread extends Thread
 
 
             String code=null;
+
+            for(PrintStream pt:ListClass.clientWriters)
+            {
+                if(pt.equals(socketOut))
+                {
+                    System.out.println("its going naturally 1");
+                }
+            }
 
            while(true)
            {
@@ -137,6 +152,13 @@ class ClientReaderThread extends Thread
 
 
                    }
+                   for(PrintStream pt:ListClass.clientWriters)
+                   {
+                       if(pt.equals(socketOut))
+                       {
+                           System.out.println("its going naturally 2");
+                       }
+                   }
 
                }
                else  if(code.equals("PersonHandler"))
@@ -146,7 +168,7 @@ class ClientReaderThread extends Thread
                    // if(forJust2ndTimeCallfrndListThread==-1)
                     {
                         forJust2ndTimeCallfrndListThread=22;
-                        Thread frndList = new FindFriend(socketOut,socketIn,clientNames,clientWriters);
+                        Thread frndList = new FindFriend(socketOut,socketIn,clientNames,ListClass.clientWriters);
                        // frndList.start();
                         System.out.println("First time and last time in code...");
 
@@ -180,11 +202,26 @@ class ClientReaderThread extends Thread
 
                     }
 
+                   for(PrintStream pt:ListClass.clientWriters)
+                   {
+                       if(pt.equals(socketOut))
+                       {
+                           System.out.println("its going naturally 3");
+                       }
+                   }
+
 
                }
                else if(code.equals("SignIn"))
                {
                   // while(n==2)
+                   for(PrintStream pt:ListClass.clientWriters)
+                   {
+                       if(pt.equals(socketOut))
+                       {
+                           System.out.println("its going naturally 4");
+                       }
+                   }
                    {
                         email=socketIn.readLine();
                        System.out.println("from server = "+email);
@@ -213,13 +250,17 @@ class ClientReaderThread extends Thread
                        System.out.println("hoise 6");
 
                        pdb.insert(name,pword,ipAdd,email);
-                       System.out.println("name = "+name);
+                       System.out.println("name = "+name+"\t printstream = "+socketOut);
                        clientNames.add(name);
 
                        System.out.println("hoise 7");
 
-                       clientWriters.add(socketOut);
-                      // SendFrndsName.add(socketOutForFrnds);
+                       map.put(name,clientSocket);
+                       Socket p=map.get(name);
+                       if(p.equals(clientSocket))
+                       {
+                           System.out.println("allha are kidding me.....");
+                       }
 
                    }
                }
@@ -227,34 +268,53 @@ class ClientReaderThread extends Thread
                else if (code.equals("rqstFrnd"))
                {
                    String frndName=socketIn.readLine();
-                   System.out.println("baallllllll   1");
+                   System.out.println("balll   1");
                    String cw=null;
+                   for(PrintStream pt:ListClass.clientWriters)
+                   {
+                       if(pt.equals(socketOut))
+                       {
+                           System.out.println("its going naturally 5");
+                       }
+                   }
 
 
                    System.out.println("Sender = "+name+"\treceiver = "+frndName);
-                 //  pdb.sendMsg(clientSocket,name,frndName);
+                   pdb.sendMsg(clientSocket,name,frndName);
                    while(true)
                    {
                        String msg=socketIn.readLine();
                        System.out.println("Msg from client 1 test :"+msg);
 
-                       if(msg.equals("end"))
+                       if(msg.equals("exit"))
                        {
                            System.out.println("loop broken ...");
+                           for(PrintStream cwt: ListClass.clientWriters)
+                               cwt.println("exitfromMsg");
+
                            break;
                        }
 
 
-
-                       System.out.println("baal 3");
-
-                         pdb.InsertMessage(frndName,name,msg);
-
-                      /* for(PrintStream cwt: clientWriters) {
-
+                       System.out.println("Size =   ="+ListClass.clientWriters.size());
+                       for(PrintStream cwt: ListClass.clientWriters) {
+                           // cwt.println(name);
                            cwt.println(msg);
+                           System.out.println("name = "+name+"\t printstream = "+cwt);
+
+                           System.out.println("baal 44444");
+
                        }
-                       */
+
+                       System.out.println("baal 4");
+
+                   }
+
+
+                               // socketOut.println(msg);
+
+
+                      /*
                        for(int i=0;i<clientNames.size();i++)
                        {
                            String Nm=clientNames.get(i);
@@ -262,14 +322,23 @@ class ClientReaderThread extends Thread
                            {
                                System.out.println("Milse frnd ");
                                System.out.println(Nm);
-                               for(int j=0;j<clientWriters.size();j++)
+                              // for(int j=0;j<clientWriters.size();j++)
                                {
                                   // if(j==i)
                                    System.out.println("in looop");
                                    {
-                                       PrintStream cwt=clientWriters.get(j);
-                                       cwt.println(name);
-                                       cwt.println(msg);
+
+                                       //cwt.println(name);
+                                       //cwt.println(msg);
+                                       for(PrintStream cwt: clientWriters) {
+                                           System.out.println("Msg from client 3 :"+msg);
+                                           cwt.println(msg);
+                                           if(cwt.equals(socketOut))
+                                           {
+                                               System.out.println("oooooo");
+                                           }
+                                       }
+                                       socketOut.println(msg);
 
 
                                    }
@@ -279,10 +348,8 @@ class ClientReaderThread extends Thread
 
 
                            }
-                       }
-                       System.out.println("baal 4");
+                       }*/
 
-                   }
 
 
 
@@ -369,6 +436,11 @@ class ClientReaderThread extends Thread
 
 public class Server {
     static final int LISTEN_PORT = 8005;
+  static   Map< String,Socket> map =new TreeMap<>();
+
+    static List<String> clientNames = new ArrayList<String>();
+
+
     public static void main(String[] args) {
         try {
            //DataBaseHandler pdb=new DataBaseHandler();
@@ -386,8 +458,12 @@ public class Server {
 
                 System.out.println("Got a new connection, number: " + cnumber);
                 System.out.println("host = "+host);
+                PrintStream socketOut = new PrintStream(s.getOutputStream());
+                ListClass.clientWriters.add(socketOut);
 
-                Thread ct = new ClientReaderThread(s, cnumber);
+
+
+                Thread ct = new ClientReaderThread(s, cnumber,map,clientNames,socketOut);
                 ct.start();
                 cnumber++;
             }
